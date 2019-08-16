@@ -1,0 +1,21 @@
+#!/bin/bash
+IFACE=eth0  # configure me
+ADDR=${PLUTO_PEER_CLIENT%/*}
+case $PLUTO_VERB in
+        up-client-v6)
+                echo "Adding proxy NDP for $ADDR via $IFACE"
+                ip -6 neigh add proxy $ADDR dev $IFACE
+                ;;
+        down-client-v6)
+                echo "Removing proxy NDP for $ADDR via $IFACE"
+                ip -6 neigh delete proxy $ADDR dev $IFACE
+                ;;
+        up-client)
+                echo "Adding proxy ARP for $ADDR via $IFACE"
+                ip neigh add proxy $ADDR dev $IFACE
+                ;;
+        down-client)
+                echo "Removing proxy ARP for $ADDR via $IFACE"
+                ip neigh delete proxy $ADDR dev $IFACE
+                ;;
+esac 2>&1 | logger -t proxyndp.updown
