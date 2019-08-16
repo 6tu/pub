@@ -1,1 +1,3 @@
 源文件来源于 acme.sh 的 dnsapi . https://github.com/Neilpang/acme.sh
+
+用于给域名添加A记录
