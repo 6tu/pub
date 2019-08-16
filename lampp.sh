@@ -119,7 +119,6 @@ useradd ftp -g ftp -m -d ${ftppub} -s /sbin/nologin
 # 建立 WEB 目录及相关文件
 test -d ${webroot}/tz || mkdir -p ${webroot}/tz
 cd ${webroot}
-/bin/cp -rf /opt/lampp/cgi-bin /var
 echo 'hello world!'>${webroot}/index.html
 echo '<?php phpinfo();' > ${webroot}/tz/phpinfo.php
 wget -q --no-check-certificate https://github.com/6tu/pub/blob/master/php/tz.zip
@@ -131,6 +130,7 @@ unzip -o -q -d ./ master.zip
 mv KodExplorer-master kod
 rm -rf master.zip
 
+/bin/cp -rf /opt/lampp/cgi-bin /var
 chmod -R 0755 /var/cgi-bin
 chown -R daemon:daemon /var/cgi-bin
 chown -R daemon:daemon ${webroot}
