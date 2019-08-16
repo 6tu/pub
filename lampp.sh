@@ -120,15 +120,14 @@ useradd ftp -g ftp -m -d ${ftppub} -s /sbin/nologin
 test -d ${webroot}/tz || mkdir -p ${webroot}/tz
 cd ${webroot}
 /bin/cp -rf /opt/lampp/cgi-bin /var
-mv ${webroot}/index.html ${webroot}/index.html.bak
 echo 'hello world!'>${webroot}/index.html
-wget -O ${webroot}/tz/vpstz.php ${github}/6tu/code/master/php/vpstz/vpstz.php
-wget -O ${webroot}/tz/jquery.js ${github}/6tu/code/master/php/vpstz/yahei/jquery.js
-wget -O ${webroot}/tz/p.php     ${github}/6tu/code/master/php/vpstz/yahei/p.php
 echo '<?php phpinfo();' > ${webroot}/tz/phpinfo.php
-
+wget -q --no-check-certificate https://github.com/6tu/pub/blob/master/php/tz.zip
+wget -q --no-check-certificate https://github.com/6tu/pub/blob/master/php/hosts.zip
 wget -q --no-check-certificate https://github.com/kalcaddle/KodExplorer/archive/master.zip
-unzip -o -q -d ./  master.zip
+unzip -o -q -d ./ tz.zip
+unzip -o -q -d ./ hosts.zip
+unzip -o -q -d ./ master.zip
 mv KodExplorer-master kod
 rm -rf master.zip
 
