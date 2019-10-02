@@ -20,17 +20,17 @@ fi
 
 # 32位系统或者内存小于0.5G时不能安装lampp，采用从源安装Apache+PHP5
 echo "" && echo "======== install web Server ========" && echo ""
-echo 运行环境: 64位操作系统，内存不小于0.5 G && echo ""
-if [ $freemem -lt 500] then
+echo "运行环境: 64位操作系统，内存不小于0.5 G" && echo ""
+if [ $freemem -lt 500 ];then
   echo "内存小于0.5G,不能安装 XAMPP" && echo ""
-  echo Apache and PHP5 is installing
+  echo "Apache and PHP5 is installing"
   ${aptyum} install -y apache2 php5 libapache2-mod-php5
   exit 1
 fi
 
 if [ 32 == $sysbit ];then
   echo "32位操作系统,不能安装 XAMPP" && echo ""
-  echo Apache and PHP5 is installing
+  echo "Apache and PHP5 is installing"
   ${aptyum} install -y apache2 php5 libapache2-mod-php5
   exit 1
 fi
