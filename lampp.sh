@@ -134,8 +134,8 @@ test -d ${webroot}/tz || mkdir -p ${webroot}/tz
 cd ${webroot}
 echo 'hello world!'>${webroot}/index.html
 echo '<?php phpinfo();' > ${webroot}/tz/phpinfo.php
-wget -q --no-check-certificate https://github.com/6tu/pub/blob/master/php/tz.zip
-wget -q --no-check-certificate https://github.com/6tu/pub/blob/master/php/hosts.zip
+wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/php/tz.zip
+wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/php/hosts.zip
 wget -q --no-check-certificate https://github.com/kalcaddle/KodExplorer/archive/master.zip
 unzip -o -q -d ./ tz.zip
 unzip -o -q -d ./ hosts.zip
