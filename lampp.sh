@@ -57,12 +57,10 @@ arr=($xampp_url)
 IFS="$OLD_IFS"
 xampp_latest=${arr[5]}
 xampp_specver=xampp-linux-x64-7.2.4-0-installer.run
-
-echo "" && echo ${xampp_url} && echo ""
-echo "" && echo ${xampp_latest} && echo ""
-echo "" && echo ${xampp_specver} && echo ""
-wget --no-check-certificate ${xampp_url}
-wget --no-check-certificate https://www.apachefriends.org/xampp-files/7.2.4/${xampp_specver}
+echo "" && echo "将要下载以下文件"
+echo ${xampp_latest} && echo ${xampp_specver} && echo ""
+wget --no-check-certificate -nv ${xampp_url}
+wget --no-check-certificate -nv https://www.apachefriends.org/xampp-files/7.2.4/${xampp_specver}
 chmod +x xampp*
 rm -rf xampp.php
 
