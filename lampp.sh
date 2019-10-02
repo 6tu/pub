@@ -42,13 +42,21 @@ cd $basepath
 test -d $basepath/soft || mkdir -p $basepath/soft
 cd $basepath/soft
 # wget http://soft.vpser.net/lnmp/lnmp1.4-full.tar.gz
-wget --no-check-certificate --content-disposition https://shideyun.com/xampp.php?os=linux -o log
-find . -name "*.run?from_af=true" | sed 's/\.run?from_af=true$//g' | xargs -I{} mv {}.run?from_af=true {}.run
-# rename "s/\?from_af=t//" *
-# rename "s/runrue/run/" *
-xampp_latest=`cat log  | sed -ne "s/Saving to: ‘\(.*\)’/\1/p" | sed 's/\?from_af=true$//g'`
+# wget --no-check-certificate --content-disposition https://shideyun.com/xampp.php?os=linux -o log
+# find . -name "*.run?from_af=true" | sed 's/\.run?from_af=true$//g' | xargs -I{} mv {}.run?from_af=true {}.run
+## rename "s/\?from_af=t//" *
+## rename "s/runrue/run/" *
+# xampp_latest=`cat log  | sed -ne "s/Saving to: ‘\(.*\)’/\1/p" | sed 's/\?from_af=true$//g'`
+# rm -rf log
+
+wget --no-check-certificate -q shideyun.com/xampp.php
+xampp_url=`grep -o "http.*\.run" xampp.php`
+rm -rf xampp.php
+IFS="/" 
+arr=($xampp_url)
+xampp_latest=${arr[5]}
 xampp_specver=xampp-linux-x64-7.2.4-0-installer.run
-rm -rf log
+wget --no-check-certificate ${xampp_url}
 wget --no-check-certificate https://www.apachefriends.org/xampp-files/7.2.4/${xampp_specver}
 chmod +x xampp*
 
