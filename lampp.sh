@@ -70,12 +70,12 @@ chmod +x xampp*
 
 # 根据 glibc 版本安装 xampp
 glibc=`ldd --version | sed -ne "s/ldd (GNU libc) \(.*\)/\1/p"`
-if [ $glibc -lt 2.13 ]; then
+if [ `expr $glibc \> 2.13` -eq 0 ];then
   echo "将安装 ${xampp_specver}"
-  ./${xampp_specver}
+  $basepath/soft/${xampp_specver}
 else
   echo "将安装 ${xampp_latest}"
-  ./${xampp_latest}
+  $basepath/soft/${xampp_latest}
 fi
 
 sed -i 's/if egrep "9 "/if egrep "Red "/g' /opt/lampp/lampp
