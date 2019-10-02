@@ -70,7 +70,7 @@ chmod +x xampp*
 
 # 根据 glibc 版本安装 xampp
 glibc=`ldd --version | sed -ne "s/ldd (GNU libc) \(.*\)/\1/p"`
-if [ $freemem -lt 2.13]; then
+if [ $glibc -lt 2.13 ]; then
   echo "将安装 ${xampp_specver}"
   ./${xampp_specver}
 else
