@@ -4,7 +4,7 @@ export PATH
 
 webroot=/var/www
 time=`date +%Y%m%d%H%M%S`
-freemem=`free -m|awk 'NR==3 {print $NF}'`
+freemem=`free -m|awk 'NR==2 {print $NF}'`
 sysbit=`getconf LONG_BIT`
 
 if [ ! -f "/usr/bin/yum" ]; then
