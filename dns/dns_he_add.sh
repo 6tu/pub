@@ -9,6 +9,7 @@ wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/
 wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/dns/dns_he.sh
 wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/dns/sip.sh
 
+# 引用脚本变量到当前shell中
 source acme.sh  >> /dev/null 2>&1
 source dns_he.sh
 source sip.sh
