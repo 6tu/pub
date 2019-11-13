@@ -4,6 +4,7 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
 cd ~
+wget -O -  https://get.acme.sh | sh
 wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/dns/acme.sh
 wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/dns/dns_he.sh
 wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/dns/sip.sh
