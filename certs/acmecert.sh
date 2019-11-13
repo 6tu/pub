@@ -16,7 +16,7 @@ source ~/.bashrc
 
 ~/.acme.sh/acme.sh --issue --dns dns_he -d ${domain}
 
-/root/.acme.sh/acme.sh --installcert -d ${domain} \
+~/.acme.sh/acme.sh --installcert -d ${domain} \
         --key-file /opt/lampp/etc/ssl.key/${domain}.key \
         --fullchain-file /opt/lampp/etc/ssl.crt/${domain}.crt \
         --reloadcmd "/opt/lampp/lampp reloadapache"
@@ -24,9 +24,11 @@ source ~/.bashrc
 
 ipsecpath=/usr/local/etc/ipsec.d
 test -d ${certspath} || ipsecpath=/etc/strongswan/ipsec.d
-/bin/cp -rf /root/.acme.sh/${domain}/chain1.pem   ${ipsecpath}/cacerts/chain.pem
-/bin/cp -rf /root/.acme.sh/${domain}/cert1.pem    ${ipsecpath}/certs/cert.pem
-/bin/cp -rf /root/.acme.sh/${domain}/privkey1.pem ${ipsecpath}/private/privkey.pem
+~/.acme.sh/acme.sh --installcert -d ${domain} \
+        --cert-file ${ipsecpath}/certs/cert.pem \
+        --key-file ${ipsecpath}/private/privkey.pem \
+        --fullchain-file ${ipsecpath}/cacerts/chain.pem \
+        --reloadcmd "ipsec restart"
 ipsec restart
 
 
