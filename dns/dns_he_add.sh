@@ -31,3 +31,6 @@ echo -e "add to dns: ${domain} => $rec => $rec_type \n"
 
 dns_he_add $domain $rec $rec_type
 
+rm -rf acme.sh
+rm -rf dns_he.sh
+rm -rf sip.sh
