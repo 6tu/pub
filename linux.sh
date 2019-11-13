@@ -95,6 +95,7 @@ if [ ! -f "/usr/bin/yum" ]; then
   iptables-save > /etc/sysconfig/iptables
   netfilter-persistent save
   netfilter-persistent reload
+  wget -O -  https://get.acme.sh | sh
 else
   yum -y update
   yum install epel-release -y
@@ -109,6 +110,7 @@ else
   systemctl restart sshd.service
   sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
   # service iptables save
+  wget -O -  https://get.acme.sh | sh
 fi
 echo 3 > /proc/sys/vm/drop_caches
 
