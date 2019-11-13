@@ -120,7 +120,7 @@ test -d shell || mkdir -p shell
 wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/denyssh.sh
 wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/dns/dns_he_add.sh
 wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/lampp.sh
-wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/ikev2vpn.sh
+wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/vpn/ikev2vpn.sh
 wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/certs/acmecert.sh
 wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/certs/dellog.sh
 wget -q --no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh
