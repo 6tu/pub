@@ -16,9 +16,9 @@ source ~/.bashrc
 
 ~/.acme.sh/acme.sh --issue --dns dns_he -d ${domain}
 
-/root/.acme.sh/acme.sh --installcert -d shideyun.com \
-        --key-file /opt/lampp/etc/ssl.key/shideyun.com.key \
-        --fullchain-file /opt/lampp/etc/ssl.crt/shideyun.com.crt \
+/root/.acme.sh/acme.sh --installcert -d ${domain} \
+        --key-file /opt/lampp/etc/ssl.key/${domain}.key \
+        --fullchain-file /opt/lampp/etc/ssl.crt/${domain}.crt \
         --reloadcmd "/opt/lampp/lampp reloadapache"
 /opt/lampp/lampp reloadapache
 
