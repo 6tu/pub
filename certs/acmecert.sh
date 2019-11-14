@@ -25,10 +25,11 @@ source ~/.bashrc
 ipsecpath=/usr/local/etc/ipsec.d
 test -d ${certspath} || ipsecpath=/etc/strongswan/ipsec.d
 ~/.acme.sh/acme.sh --installcert -d ${domain} \
-        --cert-file ${ipsecpath}/certs/cert.pem \
+        --cert-file ${ipsecpath}/certs/server.cert.pem \
         --key-file ${ipsecpath}/private/privkey.pem \
-        --fullchain-file ${ipsecpath}/cacerts/chain.pem \
+        --ca-file ${ipsecpath}/cacerts/ca.pem \
         --reloadcmd "ipsec restart"
+# --fullchain-file ${ipsecpath}/cacerts/chain.pem \
 ipsec restart
 
 
