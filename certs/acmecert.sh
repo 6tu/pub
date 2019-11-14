@@ -28,8 +28,9 @@ test -d ${certspath} || ipsecpath=/etc/strongswan/ipsec.d
         --cert-file ${ipsecpath}/certs/server.cert.pem \
         --key-file ${ipsecpath}/private/privkey.pem \
         --ca-file ${ipsecpath}/cacerts/ca.pem \
+        --fullchain-file ${ipsecpath}/cacerts/chain.pem \
         --reloadcmd "ipsec restart"
-# --fullchain-file ${ipsecpath}/cacerts/chain.pem \
+
 ipsec restart
 
 
