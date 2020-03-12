@@ -1,0 +1,310 @@
+
+yum -y install NetworkManager-strongswan NetworkManager-strongswan-gnome
+yum install nfs-utils
+vim /etc/exports
+/home 162.251.122.203(ro,no_root_squash,async)
+service portmap restart
+service nfs restart
+
+
+mount \\185.197.30.156\home\sto y:
+mount \\89.40.4.240\home x:
+
+
+
+ssh root@[2602:ffd5:1:157::1] -p 22
+
+
+mount -t nfs [2602:ffd5:1:157::1]:/home/pub /home/nfs-ca
+
+https://kproxy.com/
+
+find /home/sto2 -type f -size +2G
+删除空文件空目录
+find /home/time4vps -name "*" -type f -size 0c | xargs -n 1 rm -f
+find /home/time4vps -type d -empty  | xargs -n 1 rm -rf
+
+chown -R daemon:daemon /home/guigu-us
+chmod -R 0777 /home/guigu-us
+nohup /root/shell/copy2onedrive.sh &
+
+借助Apache模块mod_cloudflare来增强网站安全性
+http://www.senra.me/enhance-website-security-via-apache-module-mod-cloudflare/
+
+找出占用内存资源最多的前 10 个进程  # ps -auxf | sort -nr -k 4 | head -10
+找出占用 CPU 资源最多的前 10 个进程 # ps -auxf | sort -nr -k 3 | head -10
+
+157.185.179.142  wangsu.com
+
+
+vimdiff file1 file2
+XRsWmF7y=11
+ps aux
+ll /proc/PID
+kill -9 PID
+
+https://gitee.com/seiven/dnmp
+screen -S lnmp
+wget http://pub.6tu.me/soft/lnmp1.6-full.tar.gz
+tar zxf lnmp1.6-full.tar.gz
+cd lnmp1.6-full
+./install.sh lnmp
+
+
+2016-12-30 09:32  湿寒骨质增生   白术30，桂枝12，干姜10，茯苓10，甘草10，当归10，黄芪(qi)20，肉桂6。水煎三次，日服两次
+错误13868: 策略匹配错误
+php_admin_value open_basedir /var/www:/home:/opt/lampp/phpmyadmin:/opt/lampp/temp:/tmp:/var/tmp:/proc
+DocumentRoot "/var/www"
+<Directory "/var/www">
+
+chown -R daemon:daemon /home/www && chmod -R 644 /home/www
+find /home/www -type d -exec chmod 755 {} \;
+find /home/www* -exec touch {} \; 
+
+frvps  0.0.0.0:9333 1126.6TU.me
+
+ssh -p 22 root@2a0a:1f42:1001:1dfc:0000:0000:0000:0001
+
+
+
+简称“韩国”（South Korea）。北朝鲜
+
+strongswan restart
+strongswan up ikev2-rw
+
+service shadowsocks-libev restart
+
+DAEMON_ARGS="-u -A",
+"mode":"tcp_and_udp",
+
+## Rescue System 修复系统，挂载原系统
+fdisk -l
+mount /dev/vda3 /mnt
+cd /mnt
+vi /etc/fstab
+=============================================
+
+安装 KILLALL    yum install psmisc -y
+yum install -y dos2unix net-tools zip unzip openssl libssl-dev
+wget https://raw.githubusercontent.com/6tu/code/master/linux/centos/denyssh.sh
+wget https://raw.githubusercontent.com/6tu/code/master/linux/xampp/lampp.sh
+wget https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh
+
+wget https://raw.githubusercontent.com/6tu/code/master/certs/certs-init.sh
+wget https://raw.githubusercontent.com/6tu/code/master/certs/makecert.sh
+#wget https://raw.githubusercontent.com/quericy/one-key-ikev2-vpn/master/one-key-ikev2.sh
+wget https://raw.githubusercontent.com/6tu/code/master/linux/vpn/ikev2vpn.sh
+
+chmod +x *.sh && dos2unix *.sh
+
+bash ./certs-init.sh
+bash ./makecert.sh
+cp ~/certs/*_cert.crt ./server.cert.pem
+cp ~/certs/*_csr_nopw.key ./server.pem
+cp ~/certs/demoCA/cacert.pem ./ca.cert.pem
+# ./quericy-one-key-ikev2.sh
+bash ./ikev2vpn.sh
+
+ipsec pki --gen --outform pem > client.pem	
+ipsec pki --pub --in client.pem | ipsec pki --issue --cacert ca.cert.pem --cakey /root/certs/demoCA/private/cakey_nopw.pem --dn "C=CN, O=SEC Center, CN=VPN Client" --outform pem > client.cert.pem
+openssl pkcs12 -export -inkey client.pem -in client.cert.pem -name "client" -certfile ca.cert.pem -caname "Liuyun Root CA"  -out client.cert.p12
+
+/bin/cp -f ca.cert.pem     /usr/local/etc/ipsec.d/cacerts/
+/bin/cp -f server.cert.pem /usr/local/etc/ipsec.d/certs/
+/bin/cp -f server.pem      /usr/local/etc/ipsec.d/private/
+/bin/cp -f client.cert.pem /usr/local/etc/ipsec.d/certs/
+/bin/cp -f client.pem      /usr/local/etc/ipsec.d/private/
+=============================================
+
+webroot=dns_he\
+
+Issue Wildcard certificates
+
+mv acme.sh acme-src.sh
+wget -O -  https://get.acme.sh | sh
+source ~/.bashrc
+
+export HE_Username="dotmp"
+export HE_Password="qq0000000"
+~/.acme.sh/acme.sh --issue --dns dns_he -d de.6tu.me
+
+/root/.acme.sh/acme.sh --installcert -d de.6tu.me \
+        --key-file /opt/lampp/etc/ssl.key/de.6tu.me.key \
+        --fullchain-file /opt/lampp/etc/ssl.crt/de.6tu.me.crt \
+        --reloadcmd "/opt/lampp/lampp reloadapache"
+
+/bin/cp -rf /opt/lampp/etc/ssl.key/de.6tu.me.key /opt/lampp/etc/ssl.key/server.key
+/bin/cp -rf /opt/lampp/etc/ssl.crt/de.6tu.me.crt /opt/lampp/etc/ssl.crt/server.crt
+
+https://github.com/Neilpang/acme.sh/wiki/dnsapi
+https://letsencrypt.org/docs/client-options/
+https://github.com/diafygi/gethttpsforfree
+https://github.com/certbot/certbot 
+
+=============================================
+
+## 安装中文环境和改变时区
+yum install -y kde-l10n-Chinese
+# yum reinstall -y glibc-common
+
+echo LANG="zh_CN.UTF-8">/etc/locale.conf
+source /etc/locale.conf
+# localectl  set-locale LANG=zh_CN.UTF8
+# 设置时区
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+=============================================
+
+systemctl disable rpcbind
+systemctl stop rpcbind.socket
+
+/bin/systemctl stop nfslock.service
+/bin/systemctl stop portmap.service
+
+systemctl stop chronyd.service
+systemctl disable chronyd.service
+
+systemctl stop systemd-journald.service
+systemctl mask systemd-journald.service
+systemctl disable systemd-journald.service
+
+# audit工具可以对文件使用进行监控
+
+yum -y install audit auditd-libs 
+systemctl enable auditd 
+systemctl start auditd
+service auditd restart //在centos7.x上当auditd启动以后，
+
+//auditd配置拒绝使用systemctl stop、restart 。只能使用service命令
+service auditd stop
+
+=============================================
+
+apt autoclean
+apt clean
+apt autoremove
+
+netstat -anup
+
+echo > /var/log/wtmp
+echo > /var/log/btmp
+echo 3 > /proc/sys/vm/drop_caches
+echo > ~/.bash_history
+history -c
+
+
+# 删除 /var/cache/yum 的方法
+
+yum clean all
+yum makecache
+
+## 升级 kernel
+rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+yum --enablerepo=elrepo-kernel install -y kernel-ml kernel-ml-devel kernel-ml-headers
+
+#相当于UBUNTU中的 update-grub2命令
+yum install -y grub grub2
+grub2-mkconfig -o /boot/grub2/grub.cfg
+grub2-set-default 0
+
+rpm -qa | grep kernel
+yum remove -y kernel-2.6.18-194.el5
+
+=============================================
+
+PHP 用反撇号（` 替代system  反撇号`和shell_exec()
+$res='/bin/ls -l';
+
+
+chown -R daemon:daemon /home/* && chmod -R 644 /home/*
+find /home/* -type d -exec chmod 755 {} \;
+find /home/* -exec touch {} \; 
+
+
+unzip -O CP936 app.zip
+
+screen
+nohup 脚本 & 即可
+
+chmod +x /home/cp.sh
+nohup /home/cp.sh &
+
+
+vim cp.sh
+
+#!/bin/bash
+/bin/cp -rf /home/os/www /home/
+
+rm -rf /home/time4vps/storage/OS/Mac-OSX
+mv  /home/Mac-OSX /home/time4vps/storage/OS/
+
+=============================================
+## 变更防火墙及SSHD端口
+
+vi /etc/ssh/sshd_config
+Port 22622
+
+systemctl restart sshd.service
+
+vi /etc/selinux/config
+SELINUX=disabled
+setenforce 0
+
+systemctl stop firewalld
+systemctl mask firewalld
+systemctl disable firewalld
+
+yum install -y iptables-services
+systemctl enable iptables.service
+service iptables save
+systemctl restart iptables.service
+
+# 执行完毕之后/etc/syscofig/iptables文件
+
+# 清空iptables规则
+yum upgrade device-mapper-libs -y
+iptables -t nat -F
+iptables -t nat -X
+iptables -t nat -Z
+iptables -t nat -P PREROUTING ACCEPT
+iptables -t nat -P POSTROUTING ACCEPT
+iptables -t nat -P OUTPUT ACCEPT
+iptables -t mangle -F
+iptables -t mangle -X
+iptables -t mangle -P PREROUTING ACCEPT
+iptables -t mangle -P INPUT ACCEPT
+iptables -t mangle -P FORWARD ACCEPT
+iptables -t mangle -P OUTPUT ACCEPT
+iptables -t mangle -P POSTROUTING ACCEPT
+iptables -F
+iptables -X
+iptables -P FORWARD ACCEPT
+iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -t raw -F
+iptables -t raw -X
+iptables -t raw -P PREROUTING ACCEPT
+iptables -t raw -P OUTPUT ACCEPT
+
+iptables -A FORWARD -s 10.31.2.0/24  -j ACCEPT
+iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o venet0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o eth0 -j MASQUERADE
+
+SYN_RECV 攻击
+
+iptables -A FORWARD -p tcp --syn -m limit --limit 1/s -j ACCEPT
+iptables -A FORWARD -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT
+iptables -A FORWARD -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT
+
+单个IP的命令是
+iptables -I INPUT -s 211.1.0.0 -j DROP
+iptables -I INPUT -s 67.22.0.0/16 -j DROP
+iptables -I INPUT -s 94.199.0.0/16 -j DROP
+iptables -I INPUT -s 31.192.0.0/16 -j DROP
+iptables -I INPUT -s 185.75.0.0/16 -j DROP
+
+iptables -I INPUT -s 67.0.0.0/8 -j DROP
+iptables -I INPUT -s 61.37.80.0/24 -j DROP 
+
+

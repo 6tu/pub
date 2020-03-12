@@ -1,0 +1,127 @@
+Require all granted #允许所有来源访问
+Require all denied #拒绝所有来源访问
+Require expr expression #允许表达式为true时访问
+Require ip 10 172.20 192.168.2 #允许 特定IP段访问，多个段之前用空格隔开。每个段使用开头几项表示
+splaybow.com #只允许来自域名splaybow.com的主机访问
+
+
+httpd.conf
+ServerName example.com
+Require host example.com
+
+extra/httpd-default.conf
+UseCanonicalName On
+
+ServerTokens OS
+
+
+linux下要使用iptables限制只有指定的ip才能访问本机
+
+https://www.jianshu.com/p/3d143628b597
+
+将默认的规则设置为所有访问全部阻止（当然这里需要注意下，如果你要设置的机器是在远端，比如vps则需要注意在设置默认规则的同时要将与该服务器链接的ip添加进白名单，否则在设置完默认阻止后你也无法访问这台服务器，也无法再进行操作了，我们可以使用分号;或者&&来在同一个命令行下来完成默认阻止和将自己的ip添加进白名单，
+
+假如你的ip地址为1.2.3.4则可以这样输入iptables -P INPUT DROP;iptables -A INPUT -s 47.240.51.64 -p tcp -j ACCEPT，或者也可以指定一个端口)
+
+设置默认规则后则可以添加白名单了
+
+比如允许2.3.4.5访问则可以
+
+iptables -A INPUT -s 203.92.0.0/16 -p tcp -j ACCEPT
+
+如果要限定的不是整个服务器而只是该服务器中的某个服务
+
+比如web服务（一般端口在80，https在443）
+
+则我们可以使用0.0.0.0/0来阻止所有的ip地址
+
+比如 iptables -A INPUT -s 0.0.0.0/0 -p tcp --dport 80 -j DROP
+
+以及 iptables -A INPUT -s 0.0.0.0/0 -p tcp --dport 443 -j DROP
+
+来阻止所有访问web服务器的ip地址,然后再添加指定的ip到白名单
+
+允许单个IP   iptables -A INPUT -s 1.2.3.4 -p tcp --dport 80 -j ACCEPT
+
+允许某个网段 iptables -A INPUT -s 1.2.3.0/24 -p tcp --dport -j ACCEPT
+
+要封停一个IP，使用下面这条命令： 1iptables -I INPUT -s ***.***.***.*** -j DROP
+
+要解封一个IP，使用下面这条命令： 1iptables -D INPUT -s ***.***.***.*** -j DROP
+
+总之不管是阻止所有的服务还是只阻止指定的服务
+我们可以先将默认的规则设置为所有ip都不可访问
+然后再手动添加ip地址到白名单
+
+
+
+
+作者：F的平方
+
+附：关闭防火墙或防火墙开启入站允许端口3306
+
+1.查看开启防火墙没有，查看防火墙状态
+
+ps -ef|grep firewall
+
+firewall-cmd --state
+
+2.查看防火墙规则
+
+ps -ef|grep fire
+
+3.添加3306规则
+
+firewall-cmd --permanent --add-port=3306/tcp
+
+3.重启防火墙
+
+service firewalld reload
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>iptables -A INPUT -s 192.111.51.45 -p all -j ACCEPT       //开放所有端口给指定ip:192.111.51.45
+
+
+...
+③删除规则，（删除多余的规则）
+>iptables -D INPUT 2   //删除INPUTl链的第二条规则
+
+
+ 比如：不允许202.110.0.0/24的进行访问。
+ iptables -t filter -A INPUT -s 202.110.0.0/16 -p udp --dport 53 -j DROP
+ 当然你如果想拒绝的更彻底：
+ iptables -t filter -R INPUT 1 -s 202.110.0.0/16 -p udp --dport 53 -j REJECT
+
+ iptables -L -n -v  #查看定义规则的详细信息   
+
+ service iptables save
+
+
+iptables -A INPUT -s 1.2.3.4 -p tcp -j ACCEPT
+
+
+
+

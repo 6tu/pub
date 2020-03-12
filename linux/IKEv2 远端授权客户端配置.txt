@@ -1,0 +1,77 @@
+IKEv2 远端授权客户端配置
+https://oogami.name/1467/
+https://wiki.strongswan.org/projects/strongswan/wiki/IKEv2ClientConfig
+https://libreswan.org/wiki/Subnet_to_subnet_VPN
+https://wiki.strongswan.org/projects/strongswan/wiki/VirtualIp
+
+yum install -y openssl openssl-devel ca-certificates gmp-devel gpgme-devel rng-tools
+yum install -y strongswan strongswan-libipsec NetworkManager-strongswan
+
+strongswan restart
+strongswan down ikev2-rw
+ip rule add from 204.44.92.0/22 table main prio 1
+strongswan up ikev2-rw
+
+连接vpn后无法访问局域网
+ip route 或者 ip route show table 220命令来查看
+
+ip rule add from 192.168.0.0/24 table main prio 1
+ip rule add from 100.101.100.0/24 table main prio 1
+其中192.168.0.0/24与 100.101.100.0/24 为Linux VPN客户端物理接口地址的路由网段，可以通过
+
+>>>>>> ipsec.conf
+# right 是 remote 服务器端
+# left  是 local 本地端
+config setup
+    uniqueids=never
+
+conn ikev2-rw
+    keyexchange=ikev2
+
+    # ike=aes256-sha256-modp2048,3des-sha1-modp2048,aes256-sha1-modp2048!
+    # esp=aes256-sha256,3des-sha1,aes256-sha1!
+    right=pub.6tu.me
+    rightid=%pub.6tu.me
+    rightsubnet=0.0.0.0/0,::/0
+    rightauth=pubkey
+
+    leftsourceip=%config,%config4,%config6  
+    leftauth=eap-mschapv2
+    eap_identity=user
+    auto=add
+
+    # leftauth=pubkey or eap, 取决于所选的网关配置
+    # leftcert=certificate, 仅当 leftauth=pubkey (e.g. peerCert.der)
+    # eap_identity=username, 仅当 leftauth=eap (e.g. peer)
+    # leftprotoport = 17/1701  需要注释掉
+    # rightprotoport = 17/%any 需要注释掉
+	
+>>>>>> ipsec.secrets
+# 取决于ipsec.conf 中的 leftauth的这两行之一
+: RSA <private_key.file> "私约加密密码" 
+<username> : EAP "password" 
+
+
+iptables -t nat -A POSTROUTING -o eth0 -p esp -j SNAT --to-source VPNIP
+
+iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o eth0 -m policy --dir out --pol ipsec -j ACCEPT
+iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o eth0 -j MASQUERADE
+iptables -t nat -I POSTROUTING -m policy --pol ipsec --dir out -j ACCEPT
+iptables -t mangle -A FORWARD -m policy --pol ipsec --dir in -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1361:1536 -j TCPMSS --set-mss 1360
+iptables -t mangle -A FORWARD -m policy --pol ipsec --dir out -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1361:1536 -j TCPMSS --set-mss 1360
+
+>>>>> /etc/sysctl.conf
+net.ipv4.ip_no_pmtu_disc=1
+net.ipv4.conf.all.send_redirects=0
+net.ipv4.conf.default.send_redirects=0
+
+net.ipv4.ip_forward=1
+net.ipv6.conf.all.forwarding=1
+net.ipv6.conf.all.proxy_ndp=1
+
+net.ipv6.conf.all.disable_ipv6=0
+net.ipv6.conf.default.disable_ipv6=0
+net.ipv6.conf.lo.disable_ipv6=0
+
+
+ 

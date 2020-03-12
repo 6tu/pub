@@ -1,0 +1,18 @@
+
+CGIPROXY
+
+$RUNNING_ON_SSL_SERVER=1
+$USER_FACING_PORT= 443 ;
+$OVERRIDE_SECURITY= 1 ;
+$USE_DB_FOR_COOKIES= 0 ;
+$DEFAULT_LANG= &#39;zh&#39; ;
+sub cookie_encode
+sub proxy_encode
+
+DNS/FQ 利用tunnelbroker让你的SSH代理支持IPV6
+http://www.wa11ace.net/Blog/index.php/install-ikev2-on-centos-7/
+https://www.strongswan.org/testing/testresults/ikev2/net2net-pubkey/index.html
+https://gitlab.com/Alvin9999/free/wikis/自建v2ray服务器教程
+https://sskaje.me/2016/01/create-your-own-tunnelbroker-net-iproute2/
+https://quericy.me
+https://imeiji.github.io/
