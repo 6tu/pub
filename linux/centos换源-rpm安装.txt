@@ -1,0 +1,42 @@
+#!/bin/bash
+
+cd /etc/yum.repos.d/
+rm -rf bak
+mkdir -p bak
+mv *.repo bak
+
+install-centos-release() {
+ releasever="$(rpm -q --qf '%{VERSION}' "$(rpm -q --whatprovides centos-release)")" \
+ && releasever="$(printf "%s" "$releasever" | sed -e 's/\..*$//g')" \
+ && basearch="$(uname -m)" \
+ && reposurl=$(printf "%s" "http://mirror.centos.org/centos/$releasever/os/$basearch/Packages/") \
+ && releaserpm=$(curl --silent "$reposurl" | grep -oP '(?<=")centos-release.*.rpm(?=")') \
+ && releaseuri=$(printf "%s%s" "$reposurl" "$releaserpm") \
+ && rpm -Uvh --force "$releaseuri"
+}
+
+install-centos-release
+
+yum clean all
+yum install -y epel-release
+yum -y update
+yum makecache
+
+
+wget https://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Packages/i/iftop-1.0-0.21.pre4.el6.x86_64.rpm
+rpm -ivh iftop-1.0-0.21.pre4.el6.x86_64.rpm
+
+wget https://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el7/en/x86_64/rpmforge/RPMS/nload-0.7.4-1.el7.rf.x86_64.rpm
+rpm -ivh nload-0.7.4-1.el7.rf.x86_64.rpm
+
+
+
+
+
+
+
+
+
+
+
+
