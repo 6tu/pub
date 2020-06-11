@@ -6,16 +6,17 @@ du -t 10M /var/log
 find /var/log -name '*.gz'    -exec rm -rf {} \;
 find /var/log -name '*.1'     -exec rm -rf {} \;
 find /var/log -name '*-2*'    -exec rm -rf {} \;
-find /var/log -name '*.log'    -exec touch >  {} \;
+find /var/log -name '*.log'   -exec cp /dev/null {} \;
+find /var/log -type f         -exec cp /dev/null {} \;
 find /var/log -type f         -exec ls {} \;
 
-touch > /var/log/messages
-touch > /var/log/btmp
-touch > /var/log/wtmp
-touch > /opt/lampp/logs/access_log
-touch > /opt/lampp/logs/error_log
-touch > /opt/lampp/logs/php_error_log
-touch > /opt/lampp/logs/ssl_request_log
+cp /dev/null /var/log/messages
+cp /dev/null /var/log/btmp
+cp /dev/null /var/log/wtmp
+cp /dev/null /opt/lampp/logs/access_log
+cp /dev/null /opt/lampp/logs/error_log
+cp /dev/null /opt/lampp/logs/php_error_log
+cp /dev/null /opt/lampp/logs/ssl_request_log
 
 journalctl --vacuum-size=10M
 rm -rf /var/log/journal/*
