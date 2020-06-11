@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-du -t 10M /var/log
 
 find /var/log -name '*.gz'    -exec rm -rf {} \;
 find /var/log -name '*.1'     -exec rm -rf {} \;
@@ -21,3 +20,5 @@ cp /dev/null /opt/lampp/logs/ssl_request_log
 journalctl --vacuum-size=10M
 rm -rf /var/log/journal/*
 
+
+du -t 10M /var/log
