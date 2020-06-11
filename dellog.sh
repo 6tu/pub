@@ -14,3 +14,6 @@ touch > /opt/lampp/logs/error_log
 touch > /opt/lampp/logs/php_error_log
 touch > /opt/lampp/logs/ssl_request_log
 
+journalctl --vacuum-size=10M
+rm -rf /var/log/journal/*
+
