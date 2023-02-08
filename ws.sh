@@ -29,6 +29,7 @@ systemctl reload apache2
 mv /etc/apache2/sites-enabled/default-ssl.conf /etc/apache2/sites-enabled/001-default-ssl.conf
 systemctl restart apache2
 
+echo > /root/composer.json
 apt install -y composer
 composer update
 
