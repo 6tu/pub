@@ -1,11 +1,13 @@
 #!/bin/bash
 
-
 time=`date +%Y%m%d%H%M%S`
 apt update -y
-apt install -y lrzsz unar zip unzip wget curl net-tools openssl libssl-dev gnupg
+apt install -y lrzsz unar zip unzip dos2unix
+apt install -y wget curl net-tools
+apt install -y openssl ca-certificates gnupg
 
-apt install -y mysql-server mysql-client
+apt install -y mysql-server
+apt install -y mariadb-server
 apt install -y sqlite3 libsqlite3-dev
 
 # 设定 mysql 密码和 phpmyadmin
@@ -33,15 +35,26 @@ echo > /root/composer.json
 apt install -y composer
 composer update
 
+cd /opt
 test -d /etc/apache2/ssl || mkdir -p /etc/apache2/ssl
-test -d /var/www/html || mkdir -p /var/www/html
-test -d /home/tmp || mkdir -p /home/tmp
-cd /var/www/html
-wget --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/htdocs.zip
-unzip -O CP936 htdocs.zip
-chown -R www-data:www-data /var/www/html
+test -d /home/htdocs ||     mkdir -p /home/htdocs
+test -d /opt/7z2201 ||      mkdir -p /opt/7z2201
 
-mv /var/www/html/htdocs.zip /home/tmp/
+wget https://7-zip.org/a/7z2201-linux-x64.tar.xz
+tar -xvJf 7z2201-linux-x64.tar.xz -C ./7z2201/
+/bin/cp -rf ./7z2201/7zz ./7z2201/7zzs /usr/bin/
+
+wget --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/htdocs.zip
+7zz x htdocs.zip
+mv kod temp tz /home/htdocs/
+chown -R www-data:www-data /home/htdocs
+
+sed -i "s/\/var\/www\/html/\/home\/htdocs/g" /etc/apache2/sites-enabled/000-default.conf
+sed -i "s/\/var\/www\/html/\/home\/htdocs/g" /etc/apache2/sites-enabled/001-default-ssl.conf
+sed -i "s/\/var\/www\//\/home\/htdocs\//g" /etc/apache2/apache2.conf
+
+systemctl restart apache2
+systemctl stop mysql
 
 # https://certbot.eff.org/instructions?ws=nginx&os=ubuntufocal
 
