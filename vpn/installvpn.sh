@@ -9,7 +9,7 @@ apt install -y libcharon-extra-plugins libstrongswan-extra-plugins
 
 test -d /opt/vpn/cert || mkdir -p /opt/vpn/cert
 cd /opt
-wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/vpn.zip
+wget -q --no-check-certificate https://raw.githubusercontent.com/6tu/pub/master/vpn/vpn.zip
 7zz x vpn.zip
 cd /opt/vpn
 chmod +x proxyndp.updown strongswan *.sh
