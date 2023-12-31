@@ -7,7 +7,7 @@ $article_path = ARTICLE;
 $cache_path = CACHE;
 $webpage_path = WEBPAGE;
 $tmp_path = TMP;
-$elements_tag = LIBS . 'article-elements-tag.txt';
+$elements_tag = LIBS . '/article-elements-tag.txt';
 // $dir = getcwd();#当前工作目录
 // chdir('/path/to/new_directory');
 
@@ -22,15 +22,15 @@ if($cli){
     if(!empty($argv[1])){
         $url = $argv[1];
     }else{
-        fwrite(STDOUT, "\n Enter url or file: ");
+        fwrite(STDOUT, "\n\n Enter url or file: ");
         $url = trim(fgets(STDIN));
     }
 }else{
     if(empty($_GET['url']) and !$cli) die('<br><br><center>请使用参数?url=https://...</center>' . form_html());
     if(isset($_GET['url'])) $url = $_GET['url'];
 }
-if(empty(trim($url))) die("\n 输入为空，请输入本地文件名或者网址\n");
-else echo "\n $url \n";
+if(empty(trim($url))) die("\n 输入为空，请输入本地文件名或者网址\n\n");
+else print_r("\n $url\n\n");
 
 # ================ 设定文件名 ================ #
 $time = date('YmdHis');
@@ -62,7 +62,7 @@ $cache_path = CACHE .'/'. $cache_fn;
 if($domain_key === 'localhost'){
     $header = '';
     if(!file_exists($url)) die("\n $url 没找到\n");
-    $str = file_get_contents($url);    
+    $str = file_get_contents($url);
     # 这里有必要获取 url
     if(strpos($str, 'rel="canonical') !== false){
         $match = preg_match_all("'<link\srel=\"canonical[^>]*?>'si", $str, $matches);
@@ -73,9 +73,11 @@ if($domain_key === 'localhost'){
 }
 if(file_exists($article_path)){
     if(Server_OS() === 'windows') $article_path = str_replace('/', '\\', $article_path);
-    if($cli) echo "\n start $article_path \n";
-    else echo "\n<br> 相关文件 <a href='$article_path'>$article_path</a>";
+    if($cli) print_r(" start $article_path \n\n");
+    else print_r("\n<br> 相关文件 <a href='$article_path'>$article_path</a>");
     exit;
+}else if(file_exists($cache_path)){
+    $str = file_get_contents($cache_path);
 }else{
     $res_array = get_url_contents($url);
     $header = $res_array['header'];
@@ -100,35 +102,73 @@ $head = add_head($title, $url);
 # ================ 修改body 内容 ================ #
 $str = $head_array[1];
 $article_titile = preg_match("/<h1[^>]*?>.*?<\/h1>/is", $str, $temp) ? strtolower($temp[0]): "";
-echo $article_titile . "\N";
+print_r(" $article_titile\n\n");
+
 # 常用网站建立标签文件
 $tags = file_get_contents($elements_tag);
 if(strpos($tags, $host) !== false){
-    $info_array = explode("=", $tag_array[2]);
+    $info_array = explode("=", $tags);
     $tag = explode($host, $tags, 2)[1];
     $tag = explode("\n", $tag, 2)[0];
     $tag_array = explode(",", $tag);
-    
+
     $main_array = explode("=", $tag_array[1]);
-    if(trim($main_array[0]) === 'class') $main_class = str_replace('"', trim($main_array[1]));
-    if(trim($main_array[0]) === 'id') $main_id = str_replace('"', trim($main_array[1]));
-    if(trim($main_array[0]) === 'custom') $main_custom = str_replace('"', trim($main_array[1]));
+    if(trim($main_array[0]) === 'class'){
+        $mainclass = str_replace('"', '', trim($main_array[1]));
+        $article_main = getElementByClassname($str, $mainclass);
+        $article_main = mb_convert_encoding($article_main, 'UTF-8', 'HTML-ENTITIES');
+    }
+    if(trim($main_array[0]) === 'id'){
+        $mainid = str_replace('"', '', trim($main_array[1]));
+        $article_main = getElementByIdname($str, $mainid);
+        $article_main = mb_convert_encoding($article_main, 'UTF-8', 'HTML-ENTITIES');
+    }
+    if(trim($main_array[0]) === 'custom'){
+        $main_custom = str_replace('"', '', trim($main_array[1]));
+        $article_main = getElementByCustomname($str, $main_custom);
+    }
+
     if(!empty(trim($tag_array[2]))){
         $info_array = explode("=", $tag_array[2]);
-        if(trim($info_array[0]) === 'class') $info_class = str_replace('"', trim($info_array[1]));
-        if(trim($info_array[0]) === 'id') $info_id = str_replace('"', trim($info_array[1]));
-        if(trim($info_array[0]) === 'custom') $info_custom = str_replace('"', trim($info_array[1]));
+        if(trim($info_array[0]) === 'class'){
+            $infoclass = str_replace('"', '', trim($info_array[1]));
+            $article_info = getElementByClassname($str, $infoclass);
+            $article_info = mb_convert_encoding($article_info, 'UTF-8', 'HTML-ENTITIES');
+        }
+        if(trim($info_array[0]) === 'id'){
+            $infoid = str_replace('"', '', trim($info_array[1]));
+            $article_info = getElementByIdname($str, $infoid);
+            $article_info = mb_convert_encoding($article_info, 'UTF-8', 'HTML-ENTITIES');
+        }
+        if(trim($info_array[0]) === 'custom'){
+            $infocustom = str_replace('"', '', trim($info_array[1]));
+            $article_info = getElementByCustomname($str, $infocustom);
+        }
     }
     if(!empty(trim($tag_array[3]))){
         $ext_array = explode("=", $tag_array[3]);
-        if(trim($ext_array[0]) === 'class') $ext_class = str_replace('"', trim($ext_array[1]));
-        if(trim($ext_array[0]) === 'id') $ext_id = str_replace('"', trim($ext_array[1]));
-        if(trim($ext_array[0]) === 'custom') $ext_custom = str_replace('"', trim($ext_array[1]));
+        if(trim($ext_array[0]) === 'class'){
+            $extclass = str_replace('"', '', trim($ext_array[1]));
+            $article_ext = getElementByClassname($str, $extclass);
+            $article_ext = mb_convert_encoding($article_ext, 'UTF-8', 'HTML-ENTITIES');
+        }
+        if(trim($ext_array[0]) === 'id'){
+            $extid = str_replace('"', '', trim($ext_array[1]));
+            $article_ext = getElementByIdname($str, $extid);
+            $article_ext = mb_convert_encoding($article_ext, 'UTF-8', 'HTML-ENTITIES');
+        }
+        if(trim($ext_array[0]) === 'custom'){
+            $extcustom = str_replace('"', '', trim($ext_array[1]));
+            $article_ext = getElementByCustomname($str, $extcustom);
+        }
     }
 }
+if(empty($article_info)) $article_info = '';
+if(empty($article_ext)) $article_ext = '';
+$str = $article_info .$article_main . $article_ext;
 
-$str = getElementByClassname($str, $main_class);
-$str = mb_convert_encoding($str, 'UTF-8', 'HTML-ENTITIES');
+
+
 
 # pre 标签语法加亮风格
 if(strpos($str, '<pre') !== false){
@@ -137,32 +177,34 @@ if(strpos($str, '<pre') !== false){
     foreach($pre_array as $value){
         if(strpos($value, '</pre>') !== false){
             $array = explode('</pre>', $value, 2);
-            $pre = '<pre' . $array[0] . '</pre>';
-            $nopre = nonewline($nopre);
+            $pre = "\n<pre" . $array[0] . '</pre>';
+            $nopre = nonewline($array[1]);
             $nopre = imglink($nopre);
             $str .= $pre . $nopre;
-        }else $str .= $value;
+        }else{
+            $value = nonewline($value);
+            $value = imglink($value);
+            $str .= $value;
+        }
     }
-    // $str = $pre_array[0] . $str;
 }else{
     $str = nonewline($str);
     $str = imglink($str);
 }
-$str = $head .'<body>'.$article_titile. $str ."<hr>$url<br><br></body></html>";
+
+$str = modify_code($str);
+$str = del_script($str);
+$str = $head .'<body>'.$article_titile. $str ."<hr>\n$url<br><br></body></html>";
 
 $str = beautify_html($str);
 
-if(strpos($str, '</pre>') !== false){
-    /* $str = preg_replace("'<div[^>]*?>'iUs", '<div>', $str); */
-    $str = preg_replace("'<span[^>]*?>'iUs", '', $str);
-    $str = preg_replace("'</span>'iUs", '', $str);
-    $str .= "\n\n". add_style();
-}
+if(strpos($str, '</pre>') !== false) $str .= "\n\n". add_style();
+
 file_put_contents($article_path, $str);
 
 if(Server_OS() === 'windows') $article_path = str_replace('/', '\\', $article_path);
-if($cli) echo "\n\n %chrome%\\chrome.exe $article_path \n\n";
-else echo "\n<br> 相关文件 <a href='$article_path'>$article_path</a>";
+if($cli) print_r(" start $article_path\n\n");
+else print_r("\n<br> 相关文件 <a href='$article_path'>$article_path</a>");
 
 
 
@@ -200,7 +242,7 @@ function html_pretreat($str){
     $str = preg_replace("/<\s+/is", "<", $str);
     $str = preg_replace("/\s+>/is", ">", $str);
     $str = preg_replace("/<pre[^>]*?>/i", "\n<pre class=\"brush:php;toolbar:false\">\n", $str);
-    $str = preg_replace("/<\/pre[^>]*?>/i", "\n<\/pre>\n", $str);
+    $str = preg_replace("/<\/pre[^>]*?>/i", "\n</pre>\n", $str);
     return $str;
 }
 
@@ -228,8 +270,8 @@ function imglink($str){
         if(empty(trim($value))) continue;
         $value = $value . '>';
         preg_match_all('/<img.*?src=/i', $value, $img_array);
+        // print_r($img_array[0]);
         if(!empty($img_array[0])){
-            print_r($img_array[0]);
             $value = str_replace($img_array[0][0], '<img src=', $value);
             $value = str_replace("src='", 'src="', $value);
             $src_array = explode('<img src="', $value, 2);
@@ -547,19 +589,13 @@ function getElementByClassname($html, $classname){
 }
 
 # 自定义 闭合标签，比如 article
-function getElementByCustomname($html, $key1, $key2){
-    $html = preg_replace("/<br\/>/is", "", $html);
-    $html = preg_replace("'<a href=\"javascript[^>]*?>'iUs", '<a>', $html);
-    $html = str_replace("<a>加入书签</a>", "", $html);
-    $article = explode($key1, $html, 2)[1];
-    $article = explode($key2, $article, 2)[0];
-    $pos = strrpos(substr($article, 0, -1), "<") + 1;
-    $str = substr($article, $pos);
-    $url = explode('"', $str)[1];
-    $ext = pathinfo($url, PATHINFO_EXTENSION);
-    if($ext !== 'html') $url = die($url . 'false: incorrect link');
-    return array('article' => $html, 'url' => $url);
-    // $html = mb_convert_encoding($html, 'UTF-8', 'HTML-ENTITIES');
+function getElementByCustomname($html, $tag){
+    $tag1 = '<'. $tag;
+    $tag2 = '</'. $tag .'>';
+    $article = explode($tag1, $html, 2)[1];
+    $article = explode($tag2, $article, 2)[0];
+    $article = $tag1 . $article . $tag2;
+    return $article;
 }
 
 # 服务器操作系统类型
@@ -573,7 +609,7 @@ function Server_OS(){
 }
 
 # 去掉js和css风格，提取title重构head
-function del_script(){
+function del_script($str){
     $search = array(
                 "'<script[^>]*?>.*?</script>'si", # 去掉 javascript
                 "'<style[^>]*?>.*?</style>'si",   # 去掉 css
@@ -588,6 +624,19 @@ function del_script(){
     return $str;
 }
 
+# 修改 code 标签
+function modify_code($str){
+    /* $str = preg_replace("'<div[^>]*?>'iUs", '<div>', $str); */
+    $str = preg_replace("'<span[^>]*?>'iUs", '', $str);
+    $str = preg_replace("'</span>'iUs", '', $str);
+    preg_match_all('/<code.*?>/i', $str, $code_array);
+    // print_r($code_array);
+    foreach($code_array[0] as $value){
+        $str = str_replace($value, $value ."\n", $str);
+        $str = str_replace("\n\n", "\n", $str);
+    }
+    return $str;
+}
 
 
 # 替换 no-break space 为普通空格
